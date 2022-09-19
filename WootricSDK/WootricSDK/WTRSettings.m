@@ -482,7 +482,7 @@
   } else if ([self neutralTypeScore:score] && (_customThankYou.passiveThankYouLinkURL || _userCustomThankYou.passiveThankYouLinkURL)) {
     return [self passiveThankYouLinkURLWithScore:score text:text email:email];
   } else if ([self positiveTypeScore:score] && (_customThankYou.promoterThankYouLinkURL || _userCustomThankYou.promoterThankYouLinkURL)) {
-    return [self promoterThankYouLinkURLWithScore:score text:text email:email];
+    return [NSURL URLWithString:@"workvivo://appreview"];
   } else if (_customThankYou.thankYouLinkURL || _userCustomThankYou.thankYouLinkURL) {
     return [self thankYouLinkURLWithScore:score text:text email:email];
   }
