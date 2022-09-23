@@ -299,7 +299,7 @@
     if ([_settings thankYouSetupDependingOnScore:score] == nil) {
       [self updateConstraintModalHeight:220 socialShareViewHeight:180];
     } else {
-      [self updateConstraintModalHeight:240 socialShareViewHeight:200];
+      [self updateConstraintModalHeight:250 socialShareViewHeight:210];
     }
   } else if ((twitterAvailable || facebookAvailable) && ![_settings thankYouLinkConfiguredForScore:score]) {
     [self updateConstraintModalHeight:240 socialShareViewHeight:200];

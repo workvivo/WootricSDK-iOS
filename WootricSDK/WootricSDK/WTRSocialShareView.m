@@ -268,7 +268,7 @@
 }
 
 - (void)setupThankYouSetupLabelConstraints {
-  [_thankYouSetupLabel wtr_constraintHeight:30];
+  [_thankYouSetupLabel wtr_constraintHeight:40];
   [[[[_thankYouSetupLabel wtr_leftConstraint] toSecondViewLeft:self] withConstant:24] addToView:self];
   [[[[_thankYouSetupLabel wtr_rightConstraint] toSecondViewRight:self] withConstant:-24] addToView:self];
   [[[[_thankYouSetupLabel wtr_topConstraint] toSecondViewBottom:_thankYouMainLabel] withConstant:8] addToView:self];
