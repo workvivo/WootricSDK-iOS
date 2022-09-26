@@ -726,6 +726,8 @@
 }
 
 - (NSString *)promoterThankYouLinkText {
+  return @"Review Workvivo";
+  
   if (_userCustomThankYou.promoterThankYouLinkText) {
     return _userCustomThankYou.promoterThankYouLinkText;
   }
