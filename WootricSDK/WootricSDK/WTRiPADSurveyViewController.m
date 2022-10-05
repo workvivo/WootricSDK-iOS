@@ -128,7 +128,10 @@
   [_feedbackView setFollowupLabelTextBasedOnScore:sender.assignedScore];
   [_feedbackView setFeedbackPlaceholderText:placeholderText];
   if (_feedbackView.hidden) {
-    if (_settings.skipFeedbackScreen) {
+    if([_settings positiveTypeScore:_currentScore]){
+      [self sendButtonPressed];
+    }
+    else if (_settings.skipFeedbackScreen) {
       [self sendButtonPressed];
     } else if (_settings.skipFeedbackScreenForPromoter && [_settings positiveTypeScore:_currentScore]) {
       [self sendButtonPressed];
@@ -189,11 +192,40 @@
   }];
 }
 
+- (void)openWorkvivoReview {
+    NSURL *url = [NSURL URLWithString:@"workvivo://appreview"];
+  UIApplication *application = [UIApplication sharedApplication];
+    
+  if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
+    [application openURL:url
+                                       options:@{}
+                             completionHandler:^(BOOL success) {
+      if (success) {
+        [self dismissViewControllerWithBackgroundFade];
+      } else {
+        [WTRLogger logError:@"Failed to open 'thank you' url"];
+      }
+    }];
+  } else {
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+      if (success) {
+        [self dismissViewControllerWithBackgroundFade];
+      } else {
+        [WTRLogger logError:@"Failed to open wootric page"];
+      }
+    }];
+  }
+}
+
 - (void)sendButtonPressed {
   if ([_feedbackView feedbackTextPresent]) {
     _feedbackText = [_feedbackView feedbackText];
   }
-  if ([self socialShareAvailableForScore:_currentScore]) {
+  [self endUserVotedWithScore:_currentScore andText:_feedbackText];
+  if([_settings positiveTypeScore:_currentScore]){
+    [self openWorkvivoReview];
+  }
+  else if ([self socialShareAvailableForScore:_currentScore]) {
     [_socialShareView setThankYouButtonTextAndURLDependingOnScore:_currentScore text:_feedbackText];
     [_socialShareView setThankYouMainDependingOnScore:_currentScore];
     [_socialShareView setThankYouSetupDependingOnScore:_currentScore];
@@ -202,7 +234,6 @@
   } else {
     [self dismissWithFinalThankYou];
   }
-  [self endUserVotedWithScore:_currentScore andText:_feedbackText];
 }
 
 - (void)dismissButtonPressed {

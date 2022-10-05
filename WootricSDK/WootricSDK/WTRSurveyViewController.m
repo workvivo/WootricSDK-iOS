@@ -155,6 +155,32 @@
   }
 }
 
+
+- (void)openWorkvivoReview {
+    NSURL *url = [NSURL URLWithString:@"workvivo://appreview"];
+  UIApplication *application = [UIApplication sharedApplication];
+    
+  if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
+    [application openURL:url
+                                       options:@{}
+                             completionHandler:^(BOOL success) {
+      if (success) {
+        [self dismissViewControllerWithBackgroundFade];
+      } else {
+        [WTRLogger logError:@"Failed to open 'thank you' url"];
+      }
+    }];
+  } else {
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+      if (success) {
+        [self dismissViewControllerWithBackgroundFade];
+      } else {
+        [WTRLogger logError:@"Failed to open wootric page"];
+      }
+    }];
+  }
+}
+
 - (void)editScoreButtonPressed:(UIButton *)sender {
   [_feedbackView textViewResignFirstResponder];
   _scrolled = NO;
@@ -179,7 +205,10 @@
     [_feedbackView textViewResignFirstResponder];
     [self presentShareScreenOrDismissForScore:_currentScore];
   } else {
-    if (_settings.skipFeedbackScreen) {
+    if([_settings positiveTypeScore:_currentScore]){
+      [self openWorkvivoReview];
+    }
+    else if (_settings.skipFeedbackScreen) {
       [self presentShareScreenOrDismissForScore:_currentScore];
     } else if (_settings.skipFeedbackScreenForPromoter && [_settings positiveTypeScore:_currentScore]) {
         [self presentShareScreenOrDismissForScore:_currentScore];
